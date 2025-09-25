@@ -2,17 +2,31 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <IsPackable>false</IsPackable>
+        <IsPackable>true</IsPackable>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
-
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
         <IsRoslynComponent>true</IsRoslynComponent>
-
         <RootNamespace>JsonDerivedTypeGenerator</RootNamespace>
         <PackageId>JsonDerivedTypeGenerator</PackageId>
     </PropertyGroup>
 
+    <PropertyGroup Label="Nuget">
+        <PackageId>JsonDerivedTypeGenerator</PackageId>
+        <Version>0.0.1</Version>
+        <Authors>Jakub Tokarczyk</Authors>
+        <Description>Source generator for automatically adding JsonDerivedType attributes</Description>
+        <PackageTags>source-generator;roslyn;json</PackageTags>
+        <Copyright>© 2025 Jakub Tokarczyk</Copyright>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <RepositoryUrl>https://github.com/SarcasticMoose/JsonDerivedTypeGenerator</RepositoryUrl>
+    </PropertyGroup>
+
+    <ItemGroup Label="Resources">
+        <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+    </ItemGroup>
+    
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
             <PrivateAssets>all</PrivateAssets>

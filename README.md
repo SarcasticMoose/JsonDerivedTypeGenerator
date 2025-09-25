@@ -6,7 +6,7 @@
 
 The generator supports:
 
-- Abstract classes (`abstract`) and interfaces (`interface`).  
+- Abstract classes (`abstract`)
 - Generating derived type attributes only for classes marked with `[JsonSerializable]`.  
 - Adding `[JsonDerivedType]` attributes **directly on the base type**, not in separate wrapper classes.  
 
@@ -39,17 +39,15 @@ public abstract partial class Animal
 }
 ```
 
-2. Make sure your derived classes are public and optionally marked `[JsonSerializable]`:
+2. Make sure your derived classes are public:
 
 ```csharp
-[JsonSerializable]
 public class Dog : Animal
 {
     public override void MakeNoise() => {}
     public override string Kind => "Dog";
 }
 
-[JsonSerializable]
 public class Cat : Animal
 {
     public override void MakeNoise() => {}
