@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonDerivedTypeGenerator", "JsonDerivedTypeGenerator\JsonDerivedTypeGenerator\JsonDerivedTypeGenerator.csproj", "{0FEFDA3D-0F78-499B-8D3B-A476C6ECEB5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonDerivedTypeGenerator.Sample", "JsonDerivedTypeGenerator\JsonDerivedTypeGenerator.Sample\JsonDerivedTypeGenerator.Sample.csproj", "{FABD9DF1-B993-4EAC-A290-DDCC825DDE4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonDerivedTypeGenerator.Tests", "JsonDerivedTypeGenerator\JsonDerivedTypeGenerator.Tests\JsonDerivedTypeGenerator.Tests.csproj", "{690153DA-A9E5-4723-AADA-E538B5AD2044}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TEst", "TEst\TEst.csproj", "{FE56320F-BCC3-4B7D-9FD1-F2B810465340}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0FEFDA3D-0F78-499B-8D3B-A476C6ECEB5B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FEFDA3D-0F78-499B-8D3B-A476C6ECEB5B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FEFDA3D-0F78-499B-8D3B-A476C6ECEB5B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FEFDA3D-0F78-499B-8D3B-A476C6ECEB5B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FABD9DF1-B993-4EAC-A290-DDCC825DDE4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FABD9DF1-B993-4EAC-A290-DDCC825DDE4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FABD9DF1-B993-4EAC-A290-DDCC825DDE4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FABD9DF1-B993-4EAC-A290-DDCC825DDE4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{690153DA-A9E5-4723-AADA-E538B5AD2044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{690153DA-A9E5-4723-AADA-E538B5AD2044}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{690153DA-A9E5-4723-AADA-E538B5AD2044}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{690153DA-A9E5-4723-AADA-E538B5AD2044}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE56320F-BCC3-4B7D-9FD1-F2B810465340}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE56320F-BCC3-4B7D-9FD1-F2B810465340}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE56320F-BCC3-4B7D-9FD1-F2B810465340}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE56320F-BCC3-4B7D-9FD1-F2B810465340}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
