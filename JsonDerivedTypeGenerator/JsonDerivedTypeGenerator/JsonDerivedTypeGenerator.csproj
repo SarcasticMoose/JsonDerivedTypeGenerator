@@ -17,7 +17,7 @@
     
     <PropertyGroup Label="Nuget">
         <PackageId>JsonDerivedTypeGenerator</PackageId>
-        <Version>0.0.1</Version>
+        <Version>0.0.2</Version>
         <Authors>Jakub Tokarczyk</Authors>
         <Description>Source generator for automatically adding JsonDerivedType attributes</Description>
         <PackageTags>source-generator;roslyn;json</PackageTags>
