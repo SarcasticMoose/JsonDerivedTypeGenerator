@@ -6,11 +6,10 @@
 
 The generator supports:
 
-- Abstract classes (`abstract`)
+- Only classes (for now)
 - Generating derived type attributes only for classes marked with `[JsonSerializable]`.  
 - Adding `[JsonDerivedType]` attributes **directly on the base type**, not in separate wrapper classes.  
 
----
 
 ## Installation
 
@@ -21,8 +20,6 @@ dotnet add package JsonDerivedTypeGenerator
 ````
 
 > The generator runs at compile time — you don’t need to invoke it manually.
-
----
 
 ## Usage
 
@@ -67,12 +64,6 @@ public abstract partial class Animal
 }
 ```
 
----
-
 ## Notes
 
 * The base class **must be partial** so the generator can safely append attributes.
-* The generator only generates attributes for all implementation of base class that have `[JsonPolimorphic]`
-* This generator works only for classes (for now)
-
----
