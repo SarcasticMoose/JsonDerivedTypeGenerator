@@ -56,7 +56,7 @@ public sealed class DerivedTypesGenerator : IIncrementalGenerator
                     sb.AppendLine($"[JsonDerivedType(typeof({derivedType.OriginalDefinition}), nameof({derivedType.ContainingNamespace + "." + derivedType.Name}))]");
                 }
                 sb.AppendLine($"{GetModifiers(baseType.Key)} partial class {baseType.Key.Name} {{ }}");
-                spc.AddSource($"{baseType.Key.Name}_Animal.g.cs", SourceText.From(sb.ToString(), Encoding.UTF8));
+                spc.AddSource($"{baseType.Key.Name}_DerivedTypes.g.cs", SourceText.From(sb.ToString(), Encoding.UTF8));
             }
         });
     }
@@ -64,8 +64,6 @@ public sealed class DerivedTypesGenerator : IIncrementalGenerator
     string GetModifiers(INamedTypeSymbol symbol)
     {
         var parts = new List<string>();
-
-        // Accessibility
         parts.Add(symbol.DeclaredAccessibility switch
         {
             Accessibility.Public => "public",
