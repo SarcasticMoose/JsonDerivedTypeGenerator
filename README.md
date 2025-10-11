@@ -28,7 +28,7 @@ You can add the generator to your project via NuGet:
 1. Mark your base class as `[JsonPolymorphic]` and `partial`:
 
 > [!IMPORTANT]  
-> Without marking your base class as [JsonPolymorphic] and partial, it will not work.
+> Without marking your base class as `[JsonPolymorphic]` and `partial`, it will not work.
 
 ```csharp
 using System.Text.Json.Serialization;
