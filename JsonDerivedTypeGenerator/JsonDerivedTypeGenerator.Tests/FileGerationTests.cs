@@ -1,0 +1,57 @@
+using System.Linq;
+using Xunit;
+
+namespace JsonDerivedTypeGenerator.Tests;
+
+public class FileGerationTests
+{
+    private const string VectorClassText = @"
+using System.Text.Json.Serialization;
+
+namespace JsonDerivedTypeGenerator.Sample;
+
+[JsonPolymorphic]
+public abstract partial class Animal
+{
+    public abstract void MakeNoise();
+    public abstract string Kind { get; }
+}
+public class Cat : Animal
+{
+    public override void MakeNoise()
+    {
+        Console.WriteLine(""Meow"");
+    }
+
+    public override string Kind { get; }
+}
+";
+
+    [Fact]
+    public void Generate_ShouldOnlyGenerateOneFile()
+    {
+        //Arrange
+        var generator = new DerivedTypesGeneratorStub(VectorClassText);
+        
+        //Act
+        var generatedTrees = generator
+            .RunGenerator();
+        
+        //Assert
+        Assert.Single(generatedTrees);
+    }
+    
+    [Fact]
+    public void Generate_ShouldHaveCorrectFileName()
+    {
+        //Arrange
+        var generator = new DerivedTypesGeneratorStub(VectorClassText);
+        
+        //Act
+        var generatedTrees = generator.RunGenerator();
+        
+        //Assert
+        var generatedFileSyntax = generatedTrees.Single(t => t.FilePath.EndsWith("Animal_DerivedType.g.cs"));
+        Assert.NotNull(generatedFileSyntax);
+    }
+}
