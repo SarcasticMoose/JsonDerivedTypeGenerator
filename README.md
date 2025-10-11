@@ -1,22 +1,24 @@
 # JsonDerivedTypeGenerator
 
-[![Stable](https://badgen.net/nuget/v/jsonderivedtypegenerator/v?color=blue&label=Stable)](https://www.nuget.org/packages/JsonDerivedTypeGenerator)
+[![Stable](https://badgen.net/nuget/v/JsonDerivedTypeGenerator/v?color=blue&label=Stable)](https://www.nuget.org/packages/JsonDerivedTypeGenerator)
 
 **JsonDerivedTypeGenerator** is a C# **source generator** that automatically adds `[JsonDerivedType]` attributes to base classes marked with `[JsonPolymorphic]`, enabling correct polymorphic serialization with `System.Text.Json`.
 
 The generator supports:
 
-- Only classes (for now)
-- Generating derived type attributes only for classes marked with `[JsonSerializable]`.  
-- Adding `[JsonDerivedType]` attributes **directly on the base type**, not in separate wrapper classes.  
+- Only classes (for now!)
+- public and internal access modifier
+- abstract classes
 
+> [!NOTE]  
+> Unfortunately, the implementation of interfaces is not working at the moment.
 
 ## Installation
 
 You can add the generator to your project via NuGet:
 
 ```bash
-dotnet add package JsonDerivedTypeGenerator
+  dotnet add package JsonDerivedTypeGenerator
 ````
 
 > The generator runs at compile time — you don’t need to invoke it manually.
@@ -24,6 +26,9 @@ dotnet add package JsonDerivedTypeGenerator
 ## Usage
 
 1. Mark your base class as `[JsonPolymorphic]` and `partial`:
+
+> [!IMPORTANT]  
+> Without marking your base class as [JsonPolymorphic] and partial, it will not work.
 
 ```csharp
 using System.Text.Json.Serialization;
@@ -36,7 +41,7 @@ public abstract partial class Animal
 }
 ```
 
-2. Make sure your derived classes are public:
+2. Implement your base class:
 
 ```csharp
 public class Dog : Animal
@@ -63,7 +68,3 @@ public abstract partial class Animal
     public abstract string Kind { get; }
 }
 ```
-
-## Notes
-
-* The base class **must be partial** so the generator can safely append attributes.
