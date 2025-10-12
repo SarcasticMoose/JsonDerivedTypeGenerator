@@ -139,7 +139,7 @@ public class FileGerationTests
         {
             public override void MakeNoise()
             {
-                Console.WriteLine(""Meow"");
+                Console.WriteLine(""Tweet"");
             }
         }
         ";

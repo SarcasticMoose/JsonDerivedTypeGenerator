@@ -153,4 +153,44 @@ public class Dog : Animal
         Assert.NotNull(generatedTrees);
         Assert.Single(Regex.Matches(generatedTrees.ToString(), JsonDirivedTypeRegexPattern));
     }
+    
+    [Fact]
+    public void Generate_ShouldGenerateWhenJsonPolymorphicClassIsNotBaseClass()
+    {
+        //Arrange
+        string vectorClassText =
+            @"
+        using System.Text.Json.Serialization;
+
+        namespace JsonDerivedTypeGenerator.Sample;
+
+        public class BaseClass
+        {
+            
+        }
+
+        [JsonPolymorphic]
+        public abstract partial class Animal : BaseClass
+        {
+            public abstract void MakeNoise();
+            public abstract string Kind { get; }
+        }
+
+        public class Bird : Animal
+        {
+            public override void MakeNoise()
+            {
+                Console.WriteLine(""Tweet"");
+            }
+        }
+        ";
+        var generator = new DerivedTypesGeneratorStub(vectorClassText);
+
+        //Act
+        var generatedTrees = generator.RunGenerator().FirstOrDefault();
+
+        //Assert
+        Assert.NotNull(generatedTrees);
+        Assert.Single(Regex.Matches(generatedTrees.ToString(), JsonDirivedTypeRegexPattern));
+    }
 }
