@@ -35,14 +35,6 @@ internal static class CompilationHelpers
     public static string GetModifiers(
         this INamedTypeSymbol symbol)
     {
-        var sb = new StringBuilder();
-        sb.Append(symbol.DeclaredAccessibility switch
-            {
-                Accessibility.Public => "public",
-                Accessibility.Internal => "internal",
-                _ => "",
-            }
-        );
         List<string> parts =
         [
             symbol.DeclaredAccessibility switch
