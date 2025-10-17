@@ -1,6 +1,6 @@
 # JsonDerivedTypeGenerator
 
-[![Stable](https://badgen.net/nuget/v/JsonDerivedTypeGenerator/v?color=blue&label=Stable)](https://www.nuget.org/packages/JsonDerivedTypeGenerator)
+[![Stable](https://img.shields.io/nuget/v/JsonDerivedTypeGenerator.svg?color=blue&label=Stable)](https://www.nuget.org/packages/JsonDerivedTypeGenerator)
 
 **JsonDerivedTypeGenerator** is a C# **source generator** that automatically adds `[JsonDerivedType]` attributes to base classes marked with `[JsonPolymorphic]`, enabling correct polymorphic serialization with `System.Text.Json`.
 
