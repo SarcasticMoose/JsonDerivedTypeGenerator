@@ -140,7 +140,7 @@ public class Dog : Animal
         {
             public override void MakeNoise()
             {
-                Console.WriteLine(""Cwirk"");
+                Console.WriteLine(""Tweet"");
             }
         }
         ";
