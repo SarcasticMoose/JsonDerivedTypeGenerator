@@ -9,6 +9,7 @@ The generator supports:
 - Only classes (for now!)
 - public and internal access modifier
 - abstract classes
+- deep inheritance
 
 > [!NOTE]  
 > Unfortunately, the implementation of interfaces is not working at the moment.
@@ -27,9 +28,6 @@ You can add the generator to your project via NuGet:
 
 1. Mark your base class as `[JsonPolymorphic]` and `partial`:
 
-> [!IMPORTANT]  
-> Without marking your base class as `[JsonPolymorphic]` and `partial`, it will not work.
-
 ```csharp
 using System.Text.Json.Serialization;
 
@@ -40,6 +38,10 @@ public abstract partial class Animal
     public abstract string Kind { get; }
 }
 ```
+
+> [!IMPORTANT]  
+> Without marking your base class as `[JsonPolymorphic]` and `partial`, it will not work.
+
 
 2. Implement your base class:
 

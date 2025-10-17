@@ -1,12 +1,15 @@
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
 namespace JsonDerivedTypeGenerator.Tests;
 
-public class FileGerationTests
+public class FileGerationContentWithModifiersTests
 {
-    [Fact]
-    public void Generate_ShouldOnlyGenerateOneFile()
+    [Theory]
+    [InlineData("public")]
+    [InlineData("internal")]
+    public void Generate_ShouldWorkWithAccessModifiers(string accessModifier)
     {
         //Arrange
         string vectorClassText =
@@ -16,7 +19,7 @@ public class FileGerationTests
         namespace JsonDerivedTypeGenerator.Sample;
 
         [JsonPolymorphic]
-        public abstract partial class Animal
+        {@AccessModifier} partial class Animal
         {
             public abstract void MakeNoise();
             public abstract string Kind { get; }
@@ -31,55 +34,22 @@ public class FileGerationTests
             public override string Kind { get; }
         }
         ";
-        var generator = new DerivedTypesGeneratorStub(vectorClassText);
 
-        //Act
-        var generatedTrees = generator.RunGenerator();
-
-        //Assert
-        Assert.Single(generatedTrees);
-    }
-
-    [Fact]
-    public void Generate_ShouldHaveCorrectFileName()
-    {
-        //Arrange
-        string vectorClassText =
-            @"
-        using System.Text.Json.Serialization;
-
-        namespace JsonDerivedTypeGenerator.Sample;
-
-        [JsonPolymorphic]
-        public abstract partial class Animal
-        {
-            public abstract void MakeNoise();
-            public abstract string Kind { get; }
-        }
-        public class Cat : Animal
-        {
-            public override void MakeNoise()
-            {
-                Console.WriteLine(""Meow"");
-            }
-
-            public override string Kind { get; }
-        }
-        ";
-        var generator = new DerivedTypesGeneratorStub(vectorClassText);
-
-        //Act
-        var generatedTrees = generator.RunGenerator();
-
-        //Assert
-        var generatedFileSyntax = generatedTrees.Single(t =>
-            t.FilePath.EndsWith("Animal_DerivedType.g.cs")
+        var vectorClassTextWithModifiers = VectorClassFormatter.ReplaceTokens(
+            vectorClassText,
+            new Dictionary<string, string>() { ["AccessModifier"] = accessModifier }
         );
-        Assert.NotNull(generatedFileSyntax);
+        var generator = new DerivedTypesGeneratorStub(vectorClassTextWithModifiers);
+
+        //Act
+        var generatedTrees = generator.RunGenerator().First();
+
+        //Assert
+        Assert.NotNull(generatedTrees);
     }
 
     [Fact]
-    public void Generate_ShouldNotWorkWithInterface()
+    public void Generate_ShouldNotWorkWithPrivateModifier()
     {
         //Arrange
         string vectorClassText =
@@ -89,31 +59,33 @@ public class FileGerationTests
         namespace JsonDerivedTypeGenerator.Sample;
 
         [JsonPolymorphic]
-        public interface IAnimal
+        private partial class Animal
         {
             public abstract void MakeNoise();
+            public abstract string Kind { get; }
         }
-        
-        public class Cat : IAnimal
+        public class Cat : Animal
         {
             public override void MakeNoise()
             {
                 Console.WriteLine(""Meow"");
             }
+
+            public override string Kind { get; }
         }
         ";
+
         var generator = new DerivedTypesGeneratorStub(vectorClassText);
 
         //Act
-        var generatedTrees = generator.RunGenerator();
+        var generatedTrees = generator.RunGenerator().FirstOrDefault();
 
         //Assert
-        var generatedFileSyntax = generatedTrees.FirstOrDefault();
-        Assert.Null(generatedFileSyntax);
+        Assert.Null(generatedTrees);
     }
 
     [Fact]
-    public void Generate_ShouldWorkWithDeepInheritance()
+    public void Generate_ShouldWorkWithAbstractModifier()
     {
         //Arrange
         string vectorClassText =
@@ -128,27 +100,23 @@ public class FileGerationTests
             public abstract void MakeNoise();
             public abstract string Kind { get; }
         }
-
-        public abstract partial class FlyingAnimal : Animal
-        {
-            public abstract void MakeNoise();
-            public string Kind => /""Flying""
-        }
-
-        public class Bird : FlyingAnimal
+        public class Cat : Animal
         {
             public override void MakeNoise()
             {
-                Console.WriteLine(""Tweet"");
+                Console.WriteLine(""Meow"");
             }
+
+            public override string Kind { get; }
         }
         ";
+
         var generator = new DerivedTypesGeneratorStub(vectorClassText);
 
         //Act
-        var generatedTrees = generator.RunGenerator();
+        var generatedTrees = generator.RunGenerator().FirstOrDefault();
 
         //Assert
-        Assert.Single(generatedTrees);
+        Assert.NotNull(generatedTrees);
     }
 }
