@@ -6,13 +6,9 @@
 
 The generator supports:
 
-- Only classes (for now!)
+- classes and interfaces
 - public and internal access modifier
-- abstract classes
 - deep inheritance
-
-> [!NOTE]  
-> Unfortunately, the implementation of interfaces is not working at the moment.
 
 ## Installation
 
