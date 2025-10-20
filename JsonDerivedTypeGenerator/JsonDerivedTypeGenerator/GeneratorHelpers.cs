@@ -11,7 +11,9 @@ internal static class GeneratorHelpers
 
     public static bool HasPolymorphicAttribute(
         INamedTypeSymbol symbol) =>
-        symbol.GetAttributes().Any(x => x.AttributeClass?.Name == JsonPolymorphicAttributeName);
+        symbol
+            .GetAttributes()
+            .Any(x => x.AttributeClass?.Name == JsonPolymorphicAttributeName);
 
     public static string CreateSourceOutput(
         KeyValuePair<INamedTypeSymbol, List<INamedTypeSymbol>> row)

@@ -50,7 +50,7 @@ internal static class CompilationHelpers
 
     public static bool InheritsFrom(this INamedTypeSymbol symbol, INamedTypeSymbol baseType)
     {
-        if (baseType.TypeKind == TypeKind.Interface)
+        if (baseType.TypeKind is TypeKind.Interface)
         {
             return symbol.AllInterfaces.Any(i => SymbolEqualityComparer.Default.Equals(i, baseType));
         }
