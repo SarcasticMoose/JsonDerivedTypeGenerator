@@ -24,7 +24,17 @@ internal static class GeneratorHelpers
         {
             sb.AppendLine($"[JsonDerivedType(typeof({derivedType.OriginalDefinition}), nameof({derivedType.ContainingNamespace + "." + derivedType.Name}))]");
         }
-        sb.AppendLine($"{row.Key.GetModifiers()} partial class {row.Key.Name} {{ }}");
+        sb.AppendLine($"{row.Key.GetModifiers()} partial {GetTypeDescriptor(row.Key)} {row.Key.Name} {{ }}");
         return sb.ToString();
+    }
+
+    private static string GetTypeDescriptor(INamedTypeSymbol symbol)
+    {
+        return symbol.TypeKind switch
+        {
+            TypeKind.Class => "class",
+            TypeKind.Interface => "interface",
+            _ => string.Empty
+        };
     }
 }

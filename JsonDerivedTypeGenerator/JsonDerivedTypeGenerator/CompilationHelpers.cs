@@ -44,13 +44,17 @@ internal static class CompilationHelpers
                 _ => "",
             },
         ];
-        if (symbol.IsStatic) parts.Add("static");
-        else if (symbol.IsAbstract) parts.Add("abstract");
+        if (symbol is { TypeKind: TypeKind.Class, IsAbstract: true }) parts.Add("abstract");
         return string.Join(" ", parts.Where(p => !string.IsNullOrEmpty(p)));
     }
 
     public static bool InheritsFrom(this INamedTypeSymbol symbol, INamedTypeSymbol baseType)
     {
+        if (baseType.TypeKind == TypeKind.Interface)
+        {
+            return symbol.AllInterfaces.Any(i => SymbolEqualityComparer.Default.Equals(i, baseType));
+        }
+        
         var current = symbol.BaseType;
         while (current != null)
         {

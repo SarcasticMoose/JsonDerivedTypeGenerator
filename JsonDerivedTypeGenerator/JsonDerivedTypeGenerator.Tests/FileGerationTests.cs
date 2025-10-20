@@ -89,7 +89,7 @@ public class FileGerationTests
         namespace JsonDerivedTypeGenerator.Sample;
 
         [JsonPolymorphic]
-        public interface IAnimal
+        public partial interface IAnimal
         {
             public abstract void MakeNoise();
         }
@@ -109,7 +109,7 @@ public class FileGerationTests
 
         //Assert
         var generatedFileSyntax = generatedTrees.FirstOrDefault();
-        Assert.Null(generatedFileSyntax);
+        Assert.NotNull(generatedFileSyntax);
     }
 
     [Fact]

@@ -193,4 +193,40 @@ public class Dog : Animal
         Assert.NotNull(generatedTrees);
         Assert.Single(Regex.Matches(generatedTrees.ToString(), JsonDirivedTypeRegexPattern));
     }
+    
+    [Fact]
+    public void Generate_ShouldGenerateWhenBaseIsInterface()
+    {
+        //Arrange
+        string vectorClassText =
+            @"
+        using System.Text.Json.Serialization;
+
+        namespace JsonDerivedTypeGenerator.Sample;
+
+        [JsonPolymorphic]
+        public interface IAnimal
+        {
+            public void MakeNoise();
+        }
+
+        public class Bird : IAnimal
+        {
+            public override void MakeNoise()
+            {
+                Console.WriteLine(""Tweet"");
+            }
+        }
+        ";
+        var generator = new DerivedTypesGeneratorStub(vectorClassText);
+
+        //Act
+        var generatedTrees = generator.RunGenerator().First();
+
+        //Assert
+        var generatedString = generatedTrees.ToString();
+        Assert.NotNull(generatedTrees);
+        Assert.Single(Regex.Matches(generatedString, JsonDirivedTypeRegexPattern));
+        Assert.Contains("public partial interface IAnimal", generatedString);
+    }
 }
