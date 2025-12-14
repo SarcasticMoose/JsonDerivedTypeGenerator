@@ -42,7 +42,7 @@ public class FileGerationContentWithModifiersTests
         var generator = new DerivedTypesGeneratorStub(vectorClassTextWithModifiers);
 
         //Act
-        var generatedTrees = generator.RunGenerator().First();
+        var generatedTrees = generator.RunGenerator(nameof(FileGerationContentWithModifiersTests)).First();
 
         //Assert
         Assert.NotNull(generatedTrees);
@@ -59,12 +59,13 @@ public class FileGerationContentWithModifiersTests
         namespace JsonDerivedTypeGenerator.Sample;
 
         [JsonPolymorphic]
-        private partial class Animal
+        public partial class Animal
         {
             public abstract void MakeNoise();
             public abstract string Kind { get; }
         }
-        public class Cat : Animal
+        
+        private class Cat : Animal
         {
             public override void MakeNoise()
             {
@@ -78,7 +79,7 @@ public class FileGerationContentWithModifiersTests
         var generator = new DerivedTypesGeneratorStub(vectorClassText);
 
         //Act
-        var generatedTrees = generator.RunGenerator().FirstOrDefault();
+        var generatedTrees = generator.RunGenerator(nameof(FileGerationContentWithModifiersTests)).FirstOrDefault();
 
         //Assert
         Assert.Null(generatedTrees);
@@ -114,7 +115,7 @@ public class FileGerationContentWithModifiersTests
         var generator = new DerivedTypesGeneratorStub(vectorClassText);
 
         //Act
-        var generatedTrees = generator.RunGenerator().FirstOrDefault();
+        var generatedTrees = generator.RunGenerator(nameof(FileGerationContentWithModifiersTests)).FirstOrDefault();
 
         //Assert
         Assert.NotNull(generatedTrees);

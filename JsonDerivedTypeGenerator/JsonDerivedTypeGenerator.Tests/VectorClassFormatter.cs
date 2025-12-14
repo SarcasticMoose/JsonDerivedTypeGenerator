@@ -10,9 +10,7 @@ public class VectorClassFormatter
 
     public static string ReplaceTokens(string input, IDictionary<string, string> values)
     {
-        if (input == null)
-            throw new ArgumentNullException(nameof(input));
-
+        ArgumentNullException.ThrowIfNull(input);
         return TokenRegex.Replace(
             input,
             match =>
