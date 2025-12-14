@@ -34,7 +34,7 @@ public class FileGerationTests
         var generator = new DerivedTypesGeneratorStub(vectorClassText);
 
         //Act
-        var generatedTrees = generator.RunGenerator();
+        var generatedTrees = generator.RunGenerator(nameof(FileGerationTests));
 
         //Assert
         Assert.Single(generatedTrees);
@@ -69,7 +69,7 @@ public class FileGerationTests
         var generator = new DerivedTypesGeneratorStub(vectorClassText);
 
         //Act
-        var generatedTrees = generator.RunGenerator();
+        var generatedTrees = generator.RunGenerator(nameof(FileGerationTests));
 
         //Assert
         var generatedFileSyntax = generatedTrees.Single(t =>
@@ -105,7 +105,7 @@ public class FileGerationTests
         var generator = new DerivedTypesGeneratorStub(vectorClassText);
 
         //Act
-        var generatedTrees = generator.RunGenerator();
+        var generatedTrees = generator.RunGenerator(nameof(FileGerationTests));
 
         //Assert
         var generatedFileSyntax = generatedTrees.FirstOrDefault();
@@ -146,7 +146,7 @@ public class FileGerationTests
         var generator = new DerivedTypesGeneratorStub(vectorClassText);
 
         //Act
-        var generatedTrees = generator.RunGenerator();
+        var generatedTrees = generator.RunGenerator(nameof(FileGerationTests));
 
         //Assert
         Assert.Single(generatedTrees);

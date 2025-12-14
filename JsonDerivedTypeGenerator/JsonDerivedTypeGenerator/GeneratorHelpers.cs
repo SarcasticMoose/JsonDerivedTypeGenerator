@@ -39,4 +39,21 @@ internal static class GeneratorHelpers
             _ => string.Empty
         };
     }
+
+    private static string GetModifiers(
+        this INamedTypeSymbol symbol)
+    {
+        List<string> parts =
+        [
+            symbol.DeclaredAccessibility switch
+            {
+                Accessibility.Public => "public",
+                Accessibility.Internal => "internal",
+                _ => "",
+            },
+        ];
+        if (symbol is { TypeKind: TypeKind.Class, IsAbstract: true }) parts.Add("abstract");
+        return string.Join(" ", parts.Where(p => !string.IsNullOrEmpty(p)));
+    }
+
 }

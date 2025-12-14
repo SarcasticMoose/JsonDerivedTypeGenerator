@@ -1,5 +1,9 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
@@ -24,26 +28,37 @@ public sealed class DerivedTypesGenerator : IIncrementalGenerator
             compilationAndTypes,
             (spc, source) =>
             {
-                var outputTypes = new Dictionary<INamedTypeSymbol, List<INamedTypeSymbol>>(
-                    SymbolEqualityComparer.Default
-                );
+                var comparer = SymbolEqualityComparer.Default;
+                var outputTypes = new ConcurrentDictionary<INamedTypeSymbol, List<INamedTypeSymbol>>(comparer);
                 var (compilation, types) = source;
-                foreach (var type in types)
-                {
-                    if (type is null) continue;
-                    var symbol = CompilationHelpers.GetSymbol(compilation, type);
-                    if (symbol is null) continue;
-                    var havePolymorphicAttribute = GeneratorHelpers.HasPolymorphicAttribute(symbol);
-                    if (!havePolymorphicAttribute) continue;
 
-                    foreach (var inheritTypes in types)
+                var allSymbols = types
+                    .Where(t => t != null)
+                    .Select(t => CompilationHelpers.GetSymbol(compilation, t!))
+                    .Where(s => s != null)
+                    .Select(s => s!)
+                    .Where(s => s.IsAvailable())
+                    .ToImmutableArray();
+
+                var polymorphicSymbols = allSymbols
+                    .Where(GeneratorHelpers.HasPolymorphicAttribute)
+                    .ToArray();
+
+                var topSymbols = allSymbols.Except(polymorphicSymbols).ToArray();
+                
+                foreach (var topSymbol in topSymbols)
+                {
+                    foreach (var polymorphicSymbol in polymorphicSymbols)
                     {
-                        if (inheritTypes is null) continue;
-                        var inheritSymbol = CompilationHelpers.GetSymbol(compilation, inheritTypes);
-                        if (inheritSymbol is null) continue;
-                        if (!CompilationHelpers.IsTopOfHierarchy(inheritSymbol, types!, compilation)) continue;
-                        if (!inheritSymbol.InheritsFrom(symbol)) continue;
-                        AddSymbol(outputTypes, symbol, inheritSymbol);
+                        if (SymbolEqualityComparer.Default.Equals(polymorphicSymbol, topSymbol)) 
+                            continue;
+
+                        if (topSymbol.TypeKind == TypeKind.Interface) continue;
+                        
+                        if (!CompilationHelpers.IsTopOfHierarchy(topSymbol, allSymbols)) 
+                            continue;
+                        
+                        AddSymbol(outputTypes, polymorphicSymbol, topSymbol);
                     }
                 }
 
@@ -55,12 +70,13 @@ public sealed class DerivedTypesGenerator : IIncrementalGenerator
                         SourceText.From(outputString, Encoding.UTF8)
                     );
                 }
+                
             }
         );
     }
 
     private void AddSymbol(
-        Dictionary<INamedTypeSymbol, List<INamedTypeSymbol>> dict,
+        ConcurrentDictionary<INamedTypeSymbol, List<INamedTypeSymbol>> dict,
         INamedTypeSymbol baseSymbol,
         INamedTypeSymbol inheritSymbol
     )
@@ -70,6 +86,6 @@ public sealed class DerivedTypesGenerator : IIncrementalGenerator
             dict[baseSymbol.OriginalDefinition].Add(inheritSymbol);
             return;
         }
-        dict.Add(baseSymbol.OriginalDefinition, [inheritSymbol]);
+        dict.TryAdd(baseSymbol.OriginalDefinition, [inheritSymbol]);
     }
 }

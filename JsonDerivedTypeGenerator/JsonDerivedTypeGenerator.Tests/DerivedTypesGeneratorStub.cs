@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Reflection;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -13,12 +14,12 @@ public class DerivedTypesGeneratorStub
         _vectorClassText = vectorClassText;
     }
 
-    public ImmutableArray<SyntaxTree> RunGenerator()
+    public ImmutableArray<SyntaxTree> RunGenerator(string assemblyName)
     {
         var generator = new DerivedTypesGenerator();
         var driver = CSharpGeneratorDriver.Create(generator);
         var compilation = CSharpCompilation.Create(
-            nameof(FileGerationTests),
+            assemblyName,
             new[] { CSharpSyntaxTree.ParseText(_vectorClassText) },
             new[]
             {
@@ -28,6 +29,8 @@ public class DerivedTypesGeneratorStub
                         .Location
                 ),
                 MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+                MetadataReference.CreateFromFile(Assembly.Load("System.Runtime").Location),
+                MetadataReference.CreateFromFile(Assembly.Load("System.Collections").Location),
             }
         );
 

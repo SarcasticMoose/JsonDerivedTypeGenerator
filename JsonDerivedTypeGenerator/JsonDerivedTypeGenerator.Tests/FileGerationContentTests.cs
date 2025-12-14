@@ -49,7 +49,7 @@ public class Dog : Animal
         var generator = new DerivedTypesGeneratorStub(VectorClassText);
 
         //Act
-        var generatedTrees = generator.RunGenerator().First();
+        var generatedTrees = generator.RunGenerator(nameof(FileGerationContentWhenTests)).First();
 
         //Assert
         Assert.NotNull(generatedTrees);
@@ -63,7 +63,7 @@ public class Dog : Animal
         var generator = new DerivedTypesGeneratorStub(VectorClassText);
 
         //Act
-        var generatedTrees = generator.RunGenerator().First();
+        var generatedTrees = generator.RunGenerator(nameof(FileGerationContentWhenTests)).First();
 
         //Assert
         Assert.NotNull(generatedTrees);
@@ -77,7 +77,7 @@ public class Dog : Animal
         var generator = new DerivedTypesGeneratorStub(VectorClassText);
 
         //Act
-        var generatedTrees = generator.RunGenerator().First();
+        var generatedTrees = generator.RunGenerator(nameof(FileGerationContentWhenTests)).First();
 
         //Assert
         Assert.NotNull(generatedTrees);
@@ -91,7 +91,7 @@ public class Dog : Animal
         var generator = new DerivedTypesGeneratorStub(VectorClassText);
 
         //Act
-        var generatedTrees = generator.RunGenerator().First();
+        var generatedTrees = generator.RunGenerator(nameof(FileGerationContentWhenTests)).First();
 
         //Assert
         Assert.NotNull(generatedTrees);
@@ -105,7 +105,7 @@ public class Dog : Animal
         var generator = new DerivedTypesGeneratorStub(VectorClassText);
 
         //Act
-        var generatedTrees = generator.RunGenerator().First();
+        var generatedTrees = generator.RunGenerator(nameof(FileGerationContentWhenTests)).First();
 
         //Assert
         Assert.NotNull(generatedTrees);
@@ -147,7 +147,7 @@ public class Dog : Animal
         var generator = new DerivedTypesGeneratorStub(vectorClassText);
 
         //Act
-        var generatedTrees = generator.RunGenerator().FirstOrDefault();
+        var generatedTrees = generator.RunGenerator(nameof(FileGerationContentWhenTests)).FirstOrDefault();
 
         //Assert
         Assert.NotNull(generatedTrees);
@@ -187,7 +187,7 @@ public class Dog : Animal
         var generator = new DerivedTypesGeneratorStub(vectorClassText);
 
         //Act
-        var generatedTrees = generator.RunGenerator().FirstOrDefault();
+        var generatedTrees = generator.RunGenerator(nameof(FileGerationContentWhenTests)).FirstOrDefault();
 
         //Assert
         Assert.NotNull(generatedTrees);
@@ -221,12 +221,59 @@ public class Dog : Animal
         var generator = new DerivedTypesGeneratorStub(vectorClassText);
 
         //Act
-        var generatedTrees = generator.RunGenerator().First();
+        var generatedTrees = generator.RunGenerator(nameof(FileGerationContentWhenTests)).First();
 
         //Assert
         var generatedString = generatedTrees.ToString();
         Assert.NotNull(generatedTrees);
         Assert.Single(Regex.Matches(generatedString, JsonDirivedTypeRegexPattern));
         Assert.Contains("public partial interface IAnimal", generatedString);
+    }
+
+    [Fact]
+    public void Generate_ShouldGenerateWhenDeepInterfaceInheritance()
+    {
+        //Arrange
+        string vectorClassText =
+            @"
+            using System;
+        using System.Text.Json.Serialization;
+
+        namespace JsonDerivedTypeGenerator.Sample
+        {
+            [JsonPolymorphic]
+            public partial interface IAnimal
+            {
+                public void MakeNoise();
+                public string Kind { get; }
+            }
+
+            [JsonPolymorphic]
+            public partial interface IFlyingAnimal : IAnimal
+            {
+                public void MakeNoise();
+                public string Kind { get; }
+            }
+
+            public class Bird : IFlyingAnimal
+            {
+                public void MakeNoise()
+                {
+                    throw new NotImplementedException();
+                }
+
+                public string Kind => ""dsada"";
+            }
+        }
+        ";
+        var generator = new DerivedTypesGeneratorStub(vectorClassText);
+
+        //Act
+        var generatedTrees = generator.RunGenerator(nameof(FileGerationContentWhenTests));
+
+        //Assert
+        var generatedString = string.Join("", generatedTrees.Select(x => x.GetText()));
+        Assert.NotNull(generatedTrees);
+        Assert.Equal(Regex.Matches(generatedString, JsonDirivedTypeRegexPattern).Count, 2);
     }
 }
