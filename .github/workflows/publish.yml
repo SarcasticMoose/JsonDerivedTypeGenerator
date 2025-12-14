@@ -9,6 +9,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     environment: DEVELOPMENT
+    name: Publish v${{ steps.version.outputs.version }}
 
     steps:
       - name: Checkout repository
