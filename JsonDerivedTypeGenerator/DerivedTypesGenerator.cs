@@ -1,9 +1,7 @@
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
@@ -29,7 +27,7 @@ public sealed class DerivedTypesGenerator : IIncrementalGenerator
             (spc, source) =>
             {
                 var comparer = SymbolEqualityComparer.Default;
-                var outputTypes = new ConcurrentDictionary<INamedTypeSymbol, List<INamedTypeSymbol>>(comparer);
+                var outputTypes = new Dictionary<INamedTypeSymbol, List<INamedTypeSymbol>>(comparer);
                 var (compilation, types) = source;
 
                 var allSymbols = types
@@ -40,25 +38,26 @@ public sealed class DerivedTypesGenerator : IIncrementalGenerator
                     .Where(s => s.IsAvailable())
                     .ToImmutableArray();
 
-                var polymorphicSymbols = allSymbols
-                    .Where(GeneratorHelpers.HasPolymorphicAttribute)
+                var polymorphicSet = new HashSet<INamedTypeSymbol>(comparer);
+                foreach (var s in allSymbols)
+                    if (GeneratorHelpers.HasPolymorphicAttribute(s))
+                        polymorphicSet.Add(s);
+
+                var polymorphicSymbols = polymorphicSet.ToArray();
+
+                var leafSymbols = CompilationHelpers
+                    .GetLeafSymbols(allSymbols)
+                    .Where(s => !polymorphicSet.Contains(s) && s.TypeKind != TypeKind.Interface)
                     .ToArray();
 
-                var topSymbols = allSymbols.Except(polymorphicSymbols).ToArray();
-                
-                foreach (var topSymbol in topSymbols)
+                foreach (var leafSymbol in leafSymbols)
                 {
                     foreach (var polymorphicSymbol in polymorphicSymbols)
                     {
-                        if (SymbolEqualityComparer.Default.Equals(polymorphicSymbol, topSymbol)) 
+                        if (!CompilationHelpers.InheritsFrom(leafSymbol, polymorphicSymbol))
                             continue;
 
-                        if (topSymbol.TypeKind == TypeKind.Interface) continue;
-                        
-                        if (!CompilationHelpers.IsTopOfHierarchy(topSymbol, allSymbols)) 
-                            continue;
-                        
-                        AddSymbol(outputTypes, polymorphicSymbol, topSymbol);
+                        AddSymbol(outputTypes, polymorphicSymbol, leafSymbol);
                     }
                 }
 
@@ -70,22 +69,20 @@ public sealed class DerivedTypesGenerator : IIncrementalGenerator
                         SourceText.From(outputString, Encoding.UTF8)
                     );
                 }
-                
             }
         );
     }
 
-    private void AddSymbol(
-        ConcurrentDictionary<INamedTypeSymbol, List<INamedTypeSymbol>> dict,
+    private static void AddSymbol(
+        Dictionary<INamedTypeSymbol, List<INamedTypeSymbol>> dict,
         INamedTypeSymbol baseSymbol,
-        INamedTypeSymbol inheritSymbol
+        INamedTypeSymbol leafSymbol
     )
     {
-        if (dict.ContainsKey(baseSymbol.OriginalDefinition))
-        {
-            dict[baseSymbol.OriginalDefinition].Add(inheritSymbol);
-            return;
-        }
-        dict.TryAdd(baseSymbol.OriginalDefinition, [inheritSymbol]);
+        var key = baseSymbol.OriginalDefinition;
+        if (dict.TryGetValue(key, out var list))
+            list.Add(leafSymbol);
+        else
+            dict[key] = [leafSymbol];
     }
 }

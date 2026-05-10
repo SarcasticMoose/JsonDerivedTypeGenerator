@@ -20,7 +20,7 @@
         <Authors>Jakub Tokarczyk</Authors>
         <Description>Source generator for automatically adding JsonDerivedType attributes</Description>
         <PackageTags>source-generator;roslyn;json</PackageTags>
-        <Copyright>© 2025 Jakub Tokarczyk</Copyright>
+        <Copyright>© 2026 Jakub Tokarczyk</Copyright>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <RepositoryUrl>https://github.com/SarcasticMoose/JsonDerivedTypeGenerator</RepositoryUrl>

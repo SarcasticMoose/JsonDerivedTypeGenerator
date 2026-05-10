@@ -55,5 +55,4 @@ internal static class GeneratorHelpers
         if (symbol is { TypeKind: TypeKind.Class, IsAbstract: true }) parts.Add("abstract");
         return string.Join(" ", parts.Where(p => !string.IsNullOrEmpty(p)));
     }
-
 }
