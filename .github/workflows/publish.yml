@@ -9,7 +9,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     environment: DEVELOPMENT
-    name: Publish v${{ steps.version.outputs.version }}
+    name: Publish ${{ github.ref_name }}
 
     steps:
       - name: Checkout repository
@@ -46,6 +46,8 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v3
         with:
+          token: ${{ secrets.GH_PAT }}
           tag_name: ${{ github.ref_name }}
           name: v${{ steps.version.outputs.version }}
+          generate_release_notes: true
           files: ./nupkg/*.nupkg
