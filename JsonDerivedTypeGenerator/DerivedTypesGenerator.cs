@@ -47,7 +47,7 @@ public sealed class DerivedTypesGenerator : IIncrementalGenerator
 
                 var leafSymbols = CompilationHelpers
                     .GetLeafSymbols(allSymbols)
-                    .Where(s => !polymorphicSet.Contains(s) && s.TypeKind != TypeKind.Interface)
+                    .Where(s => !polymorphicSet.Contains(s) && s.TypeKind != TypeKind.Interface && !GeneratorHelpers.HasIgnoreAttribute(s))
                     .ToArray();
 
                 foreach (var leafSymbol in leafSymbols)

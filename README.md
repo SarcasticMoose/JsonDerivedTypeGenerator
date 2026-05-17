@@ -9,8 +9,14 @@ The generator supports:
 - classes and interfaces
 - public and internal access modifier
 - deep inheritance
+- excluding specific derived types via `[JsonDerivedTypeIgnore]`
 
 ## Installation
+
+> [!NOTE]
+> `JsonDerivedTypeGenerator` depends on `JsonDerivedTypeGenerator.Attributes`, which is installed automatically as a transitive dependency.
+
+
 
 You can add the generator to your project via NuGet:
 
@@ -66,3 +72,20 @@ public abstract partial class Animal
     public abstract string Kind { get; }
 }
 ```
+
+## Excluding derived types
+
+Mark a derived type with `[JsonDerivedTypeIgnore]` to exclude it from the generated attributes:
+
+```csharp
+using System.Text.Json.Serialization;
+
+[JsonDerivedTypeIgnore]
+public class UnknownAnimal : Animal
+{
+    public override void MakeNoise() => {}
+    public override string Kind => "Unknown";
+}
+```
+
+The generator will skip `UnknownAnimal` — no `[JsonDerivedType(typeof(UnknownAnimal), ...)]` will be emitted. Attempting to serialize an instance of an ignored type as the base type will throw `NotSupportedException` at runtime.

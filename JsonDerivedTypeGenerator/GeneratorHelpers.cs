@@ -8,12 +8,19 @@ namespace JsonDerivedTypeGenerator;
 internal static class GeneratorHelpers
 {
     private const string JsonPolymorphicAttributeName = "JsonPolymorphicAttribute";
+    private const string JsonDerivedTypeIgnoreAttributeName = "JsonDerivedTypeIgnoreAttribute";
 
     public static bool HasPolymorphicAttribute(
         INamedTypeSymbol symbol) =>
         symbol
             .GetAttributes()
             .Any(x => x.AttributeClass?.Name == JsonPolymorphicAttributeName);
+
+    public static bool HasIgnoreAttribute(
+        INamedTypeSymbol symbol) =>
+        symbol
+            .GetAttributes()
+            .Any(x => x.AttributeClass?.Name == JsonDerivedTypeIgnoreAttributeName);
 
     public static string CreateSourceOutput(
         KeyValuePair<INamedTypeSymbol, List<INamedTypeSymbol>> row)
