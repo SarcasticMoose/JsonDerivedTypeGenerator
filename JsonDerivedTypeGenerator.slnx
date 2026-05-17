@@ -1,4 +1,6 @@
 ﻿<Solution>
+  <Project Path="JsonDerivedTypeGenerator.Attributes/JsonDerivedTypeGenerator.Attributes.csproj" Type="C#" />
+  <Project Path="JsonDerivedTypeGenerator.IntegrationTests/JsonDerivedTypeGenerator.IntegrationTests.csproj" Type="C#" />
   <Project Path="JsonDerivedTypeGenerator.Tests/JsonDerivedTypeGenerator.Tests.csproj" Type="C#" />
   <Project Path="JsonDerivedTypeGenerator/JsonDerivedTypeGenerator.csproj" Type="C#" />
 </Solution>

@@ -15,6 +15,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\JsonDerivedTypeGenerator\JsonDerivedTypeGenerator.csproj"/>
+        <ProjectReference Include="..\JsonDerivedTypeGenerator.Attributes\JsonDerivedTypeGenerator.Attributes.csproj"/>
     </ItemGroup>
 
 
