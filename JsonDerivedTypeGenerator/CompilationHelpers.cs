@@ -21,12 +21,13 @@ internal static class CompilationHelpers
     public static bool InheritsFrom(INamedTypeSymbol symbol, INamedTypeSymbol potentialBase)
     {
         if (potentialBase.TypeKind == TypeKind.Interface)
-            return symbol.AllInterfaces.Any(i => SymbolEqualityComparer.Default.Equals(i, potentialBase));
+            return symbol.AllInterfaces.Any(i =>
+                SymbolEqualityComparer.Default.Equals(i.OriginalDefinition, potentialBase.OriginalDefinition));
 
         var current = symbol.BaseType;
         while (current != null)
         {
-            if (SymbolEqualityComparer.Default.Equals(current, potentialBase))
+            if (SymbolEqualityComparer.Default.Equals(current.OriginalDefinition, potentialBase.OriginalDefinition))
                 return true;
             current = current.BaseType;
         }

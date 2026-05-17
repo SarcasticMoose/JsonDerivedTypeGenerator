@@ -33,8 +33,16 @@ internal static class GeneratorHelpers
         {
             sb.AppendLine($"[JsonDerivedType(typeof({derivedType.OriginalDefinition}), nameof({derivedType.ContainingNamespace + "." + derivedType.Name}))]");
         }
-        sb.AppendLine($"{row.Key.GetModifiers()} partial {GetTypeDescriptor(row.Key)} {row.Key.Name} {{ }}");
+        sb.AppendLine($"{row.Key.GetModifiers()} partial {GetTypeDescriptor(row.Key)} {GetTypeName(row.Key)} {{ }}");
         return sb.ToString();
+    }
+
+    private static string GetTypeName(INamedTypeSymbol symbol)
+    {
+        if (symbol.TypeParameters.Length == 0)
+            return symbol.Name;
+        var typeParams = string.Join(", ", symbol.TypeParameters.Select(tp => tp.Name));
+        return $"{symbol.Name}<{typeParams}>";
     }
 
     private static string GetTypeDescriptor(INamedTypeSymbol symbol)

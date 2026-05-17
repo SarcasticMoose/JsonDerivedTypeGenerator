@@ -9,6 +9,7 @@ The generator supports:
 - classes and interfaces
 - public and internal access modifier
 - deep inheritance
+- generic base classes and interfaces
 - excluding specific derived types via `[JsonDerivedTypeIgnore]`
 
 ## Installation
@@ -72,6 +73,29 @@ public abstract partial class Animal
     public abstract string Kind { get; }
 }
 ```
+
+## Generic base classes
+
+Generic classes and interfaces are fully supported as polymorphic bases:
+
+```csharp
+[JsonPolymorphic]
+public abstract partial class Result<T> { }
+
+public class IntSuccess : Result<int> { }
+public class StringSuccess : Result<string> { }
+```
+
+The generator will emit:
+
+```csharp
+[JsonDerivedType(typeof(IntSuccess), nameof(IntSuccess))]
+[JsonDerivedType(typeof(StringSuccess), nameof(StringSuccess))]
+public abstract partial class Result<T> { }
+```
+
+Multiple type parameters are also supported (`Either<TLeft, TRight>`, etc.).
+
 
 ## Excluding derived types
 
